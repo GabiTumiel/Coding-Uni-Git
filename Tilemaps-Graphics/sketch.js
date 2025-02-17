@@ -30,8 +30,8 @@ function setup() {
   for(let tileX=0;tileX<tilesX;tileX++){
     tileMap[tileX]=[];
     for(let tileY=0; tileY<tilesY;tileY++){
-      let textureIndex=graphicsMap[tileY][tileX]
-      tileMap[tileX][tileY]=new Tile(textures[textureIndex],tileX,tileY,tileSize,tileID);
+      let texture=graphicsMap[tileY][tileX]
+      tileMap[tileX][tileY]=new Tile(textures[texture],tileX,tileY,tileSize,tileID);
       tileID++;
     }
   }
