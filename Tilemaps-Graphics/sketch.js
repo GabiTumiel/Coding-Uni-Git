@@ -1,3 +1,4 @@
+//FIX CODE
 let tileMap=[];
 let tilesX=10;
 let tilesY=10;
