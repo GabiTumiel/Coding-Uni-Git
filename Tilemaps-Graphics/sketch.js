@@ -1,4 +1,8 @@
-//FIX CODE
+//INITIALIZE PLAYER VARIABLES
+let player;
+let playerSprite;
+let playerSpeed=5;
+//INITIALIZE TILEMAP VARIBLES
 let tileMap=[];
 let tilesX=10;
 let tilesY=10;
@@ -20,9 +24,25 @@ let graphicsMap=[
   [0,0,0,0,0,0,0,0,0,0]  //9
 ]
 
+let tileRules=[
+  // Y VALUES (second value)  
+  // 0 1 2 3 4 5 6 7 8 9  
+    [0,0,0,0,0,0,0,0,0,0], //0
+    [0,0,0,0,0,0,0,0,0,0], //1
+    [0,0,0,1,0,0,0,0,0,0], //2
+    [0,0,0,0,0,0,0,0,0,0], //3
+    [0,0,0,0,0,0,0,0,0,0], //4    X VALUES (first value)
+    [0,0,0,0,0,0,0,0,0,0], //5
+    [0,0,0,0,0,0,0,0,0,0], //6
+    [0,0,0,0,0,0,0,0,0,0], //7
+    [0,0,0,0,0,0,0,0,0,0], //8
+    [0,0,0,0,0,0,0,0,0,0]  //9
+  ]
+
 function preload(){
-  textures[0]= loadImage("grassy.png");
-  textures[1]= loadImage("stone.png");
+  textures[0]=loadImage("grassy.png");
+  textures[1]=loadImage("stone.png");
+  playerSprite=loadImage("librarian-bw.png")
 }
 
 function setup() {
@@ -36,6 +56,7 @@ function setup() {
       tileID++;
     }
   }
+  player=new Player(playerSprite,3,3,tileSize,tileRules);
 }
 
 function draw() {
@@ -46,6 +67,9 @@ function draw() {
       tileMap[tileX][tileY].debugGrid();
     }
   }
+  player.display();
+  player.setDirection();
+  player.move()
 }
 
 class Tile{
@@ -59,9 +83,11 @@ class Tile{
     this.yPos=this.tileY*tileSize; //xpos ypos are pixel position in relation to canvas
     this.texture=texture
   }
+
   display(){
     image(this.texture,this.xPos,this.yPos,this.tileSize,this.tileSize)
   }
+
   debugGrid(){
     let xPadding=2;
     let yCoordinatePadding=8;
@@ -81,6 +107,7 @@ class Tile{
     stroke('yellow');
     rect(this.xPos,this.yPos,this.tileSize,this.tileSize);
   }
+
   displayMessage(){
     let xPadding=2;
     let yPadding=40;
@@ -90,5 +117,83 @@ class Tile{
     fill("white")
     textSize(10)
     text("Accessed!",this.xPos+xPadding,this.yPos+yPadding)
+  }
+}
+
+class Player{
+  constructor(sprite,startX,startY,tileSize,tileRules){
+
+    this.sprite=sprite;
+    this.tileX=startX,
+    this.tileY=startY,
+    this.xPos=startX*tileSize;
+    this.yPos=startY*tileSize;
+    this.dirX=0;
+    this.dirY=0;
+    this.tx=this.xPos;
+    this.ty=this.yPos;
+    this.isMoving=false;
+    this.speed=5;
+    this.tileSize=tileSize;
+    this.tileRules=tileRules;
+  }
+  display(){
+    image(this.sprite,this.xPos,this.yPos,this.tileSize,this.tileSize)
+  }
+  setDirection(){
+    let up=87;
+    let down=83;
+    let left=65;
+    let right=68;
+
+    if(!this.isMoving){
+      if(keyIsDown(up)){
+        this.dirX=0;
+        this.dirY=-1;
+      }
+      if(keyIsDown(down)){
+        this.dirX=0;
+        this.dirY=1;
+      }
+      if(keyIsDown(left)){
+        this.dirX=-1;
+        this.dirY=0
+      }
+      if(keyIsDown(right)){
+        this.dirX=1;
+        this.dirY=0;
+      }
+      this.checkTargetTile()
+    }
+  }
+  checkTargetTile(){
+    this.tileX=Math.floor(this.xPos/this.tileSize);
+    this.tileY=Math.floor(this.yPos/this.tileSize);
+
+    let nextTileX=this.tileX+this.dirX;
+    let nextTileY=this.tileY+this.dirY;
+
+    if(nextTileX>=0 &&
+      nextTileX<tilesX &&
+      nextTileY>=0 &&
+      nextTileY<tilesY){
+        if(tileRules[nextTileY][nextTileX]!=1){
+          this.tx=nextTileX*tileSize;
+          this.ty=nextTileY*tileSize;
+          this.isMoving=true;
+        }
+      }
+  }
+  move(){
+    if(this.isMoving){
+      this.xPos+=this.speed*this.dirX;
+      this.yPos+=this.speed*this.dirY;
+
+    if(this.xPos===this.tx&&this.yPos===this.ty){
+      this.isMoving=false;
+      this.dirX=0;
+      this.dirY=0;
+    }
+    }
   }
 }
