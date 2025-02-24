@@ -21,8 +21,8 @@ let graphicsMap=[
 ]
 
 function preload(){
-  textures[0]= loadImage("grassy.png")
-  textures[1]= loadImage("stone.png")
+  textures[0]= loadImage("grassy.png");
+  textures[1]= loadImage("stone.png");
 }
 
 function setup() {
@@ -42,15 +42,14 @@ function draw() {
   background(0);
   for(let tileX=0;tileX<tilesX;tileX++){
     for(let tileY=0;tileY<tilesY;tileY++){
-      display(); //run display function here somehow
+      tileMap[tileX][tileY].display()
       tileMap[tileX][tileY].debugGrid();
     }
   }
-  tileMap[5][6].displayMessage()
 }
 
 class Tile{
-  constructor(tileX,tileY,tileSize,tileID){
+  constructor(texture,tileX,tileY,tileSize,tileID){
     
     this.tileX=tileX;
     this.tileY=tileY;
@@ -58,6 +57,7 @@ class Tile{
     this.tileID=tileID;
     this.xPos=this.tileX*tileSize; //tilex tiley are position of tile in tilemap grid
     this.yPos=this.tileY*tileSize; //xpos ypos are pixel position in relation to canvas
+    this.texture=texture
   }
   display(){
     image(this.texture,this.xPos,this.yPos,this.tileSize,this.tileSize)
