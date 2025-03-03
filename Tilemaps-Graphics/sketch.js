@@ -1,62 +1,155 @@
-//INITIALIZE PLAYER VARIABLES
+//VARIABLES
+//PLAYER
 let player;
 let playerSprite;
 let playerSpeed=5;
-//INITIALIZE TILEMAP VARIBLES
+//TILEMAP
 let tileMap=[];
 let tilesX=10;
 let tilesY=10;
 let tileSize=50;
-let textures=[]
+let textures=[];
 
-let graphicsMap=[
-// Y VALUES (second value)  
-// 0 1 2 3 4 5 6 7 8 9  
-  [0,0,0,0,0,0,0,0,0,0], //0
-  [0,0,0,0,0,0,0,0,0,0], //1
-  [0,0,0,1,0,0,0,0,0,0], //2
-  [0,0,0,0,0,0,0,0,0,0], //3
-  [0,0,0,0,0,0,0,0,0,0], //4    X VALUES (first value)
-  [0,0,0,0,0,0,0,0,0,0], //5
-  [0,0,0,0,0,0,0,0,0,0], //6
-  [0,0,0,0,0,0,0,0,0,0], //7
-  [0,0,0,0,0,0,0,0,0,0], //8
-  [0,0,0,0,0,0,0,0,0,0]  //9
-]
-
-let tileRules=[
-  // Y VALUES (second value)  
-  // 0 1 2 3 4 5 6 7 8 9  
-    [0,0,0,0,0,0,0,0,0,0], //0
+//LEVEL DATA OBJECTS
+let level0={
+  graphicsMap:[
+  //2nd value
+  // 0 1 2 3 4 5 6 7 8 9
+    [0,0,0,0,0,0,0,2,3,2], //0
     [0,0,0,0,0,0,0,0,0,0], //1
     [0,0,0,1,0,0,0,0,0,0], //2
     [0,0,0,0,0,0,0,0,0,0], //3
-    [0,0,0,0,0,0,0,0,0,0], //4    X VALUES (first value)
+    [0,0,0,0,0,0,0,0,0,0], //4
+    [0,0,0,0,0,0,0,0,0,0], //5   //1st value
+    [0,0,0,0,0,0,0,0,0,0], //6
+    [0,0,0,0,0,0,0,0,0,0], //7
+    [0,0,0,0,0,0,0,0,0,0], //8
+    [0,0,0,0,0,0,0,0,0,0], //9
+  ],
+
+   tileRules:[
+  //2nd value
+  // 0 1 2 3 4 5 6 7 8 9 
+    [0,0,0,0,0,0,0,1,2,1], //0
+    [0,0,0,0,0,0,0,0,0,0], //1
+    [0,0,0,1,0,0,0,0,0,0], //2
+    [0,0,0,0,0,0,0,0,0,0], //3
+    [0,0,0,0,0,0,0,0,0,0], //4
     [0,0,0,0,0,0,0,0,0,0], //5
     [0,0,0,0,0,0,0,0,0,0], //6
     [0,0,0,0,0,0,0,0,0,0], //7
     [0,0,0,0,0,0,0,0,0,0], //8
-    [0,0,0,0,0,0,0,0,0,0]  //9
-  ]
+    [0,0,0,0,0,0,0,0,0,0], //9
+   ],
+   startTileX:8,
+   startTileY:1
+  }
+
+  let level1={
+    graphicsMap:[
+    //2nd VALUE (x)  
+    // 0 1 2 3 4 5 6 7 8 9
+      [4,4,4,4,4,4,4,4,4,4], // 0
+      [4,4,4,4,4,4,4,4,4,4], // 1
+      [4,4,4,4,4,4,4,4,4,4], // 2 
+      [2,2,2,2,2,2,2,2,2,2], // 3
+      [2,4,4,4,4,4,4,4,4,2], // 4
+      [2,4,4,4,4,4,4,4,4,3], // 5
+      [2,4,4,4,4,4,4,4,4,2], // 6
+      [2,2,2,2,2,2,2,2,2,2], // 7
+      [4,4,4,4,4,4,4,4,4,4], // 8
+      [4,4,4,4,4,4,4,4,4,4]  // 9
+    ],
+
+    tileRules: [
+    //         2nd VALUE (x)  
+    //   0 1 2 3 4 5 6 7 8 9
+        [1,1,1,1,1,1,1,1,1,1], // 0
+        [1,1,1,1,1,1,1,1,1,1], // 1
+        [1,1,1,1,1,1,1,1,1,1], // 2 
+        [1,1,1,1,1,1,1,1,1,1], // 3
+        [1,0,0,0,0,0,0,0,0,1], // 4  1st VALUE (y)
+        [1,0,0,0,0,0,0,0,0,2], // 5
+        [1,0,0,0,0,0,0,0,0,1], // 6
+        [1,1,1,1,1,1,1,1,1,1], // 7
+        [1,1,1,1,1,1,1,1,1,1], // 8
+        [1,1,1,1,1,1,1,1,1,1]  // 9
+    ],
+
+    startTileX: 1, //Sets X tile to start player on
+    startTileY: 5  //Sets Y tile to start player on
+}
+
+let level2 = {
+
+    graphicsMap: [ 
+    //              2nd Value (x)
+    //   0 1 2 3 4 5 6 7 8 9 
+        [2,2,2,2,2,2,2,2,2,2], // 0
+        [2,4,4,4,4,4,4,4,4,2], // 1
+        [2,4,2,4,4,4,4,4,4,2], // 2
+        [2,4,4,4,4,4,4,2,4,2], // 3
+        [2,4,4,4,4,4,4,4,4,2], // 4    1st Value (y)
+        [2,4,2,4,4,4,4,4,4,2], // 5
+        [2,4,4,4,4,4,4,4,4,2], // 6
+        [2,4,4,4,4,4,2,2,4,2], // 7
+        [2,4,4,4,4,4,4,4,4,2], // 8
+        [2,2,3,2,2,2,2,2,2,2]  // 9
+    ],
+
+    tileRules: [ 
+    //              2nd Value (x)
+    //   0 1 2 3 4 5 6 7 8 9 
+        [1,1,1,1,1,1,1,1,1,1], // 0
+        [1,0,0,0,0,0,0,0,0,1], // 1
+        [1,0,1,0,0,0,0,0,0,1], // 2
+        [1,0,0,0,0,0,0,1,0,1], // 3
+        [1,0,0,0,0,1,0,0,0,1], // 4    1st Value (y)
+        [1,0,1,0,0,0,0,0,0,1], // 5
+        [1,0,0,0,0,0,0,0,0,1], // 6
+        [1,0,0,0,0,0,1,1,0,1], // 7
+        [1,0,0,0,0,0,0,0,0,1], // 8
+        [1,1,1,1,1,1,1,1,1,1]  // 9
+    ],
+
+    startTileX: 2,
+    startTileY: 8 
+}
+
+//LEVEL CONTROLS VARIABLES
+letlevels=[level0,level1,level2];
+let currentLevel=0;
+let graphicMap;
+let tileRules;
 
 function preload(){
   textures[0]=loadImage("grassy.png");
   textures[1]=loadImage("stone.png");
-  playerSprite=loadImage("librarian-bw.png")
+  textures[2]=loadImage("wall_50x.png");
+  textures[3]=("door.png");
+  textures[4]=("void_50x.png");
+  playerSprite=loadImage("librarian-bw.png");
 }
 
 function setup() {
   createCanvas(500,500);
-  let tileID=0;
-  for(let tileX=0;tileX<tilesX;tileX++){
-    tileMap[tileX]=[];
-    for(let tileY=0; tileY<tilesY;tileY++){
-      let texture=graphicsMap[tileY][tileX]
-      tileMap[tileX][tileY]=new Tile(textures[texture],tileX,tileY,tileSize,tileID);
+  loadLevel();
+  player=new Player(playerSprite,3,3,tileSize,tileRules);
+}
+
+function loadLevel() {
+  graphicsMap=levels[currentLevel].graphicsMap;
+  tileRules=levels[currentLevel].tileRules;
+
+  let tileID = 0;
+  for (let tileX = 0; tileX < tilesX; tileX++) {
+    tileMap[tileX] = [];
+    for (let tileY = 0; tileY < tilesY; tileY++) {
+      let texture = graphicsMap[tileY][tileX];
+      tileMap[tileX][tileY] = new Tile(textures[texture], tileX, tileY, tileSize, tileID);
       tileID++;
     }
   }
-  player=new Player(playerSprite,3,3,tileSize,tileRules);
 }
 
 function draw() {
@@ -177,7 +270,14 @@ class Player{
       nextTileX<tilesX &&
       nextTileY>=0 &&
       nextTileY<tilesY){
-        if(tileRules[nextTileY][nextTileX]!=1){
+
+        if(tileRules[nextTileY][nextTileX]===2){
+          currentLevel++;
+
+          loadLevel();
+        }
+
+        else if(tileRules[nextTileY][nextTileX]!=1){
           this.tx=nextTileX*tileSize;
           this.ty=nextTileY*tileSize;
           this.isMoving=true;
